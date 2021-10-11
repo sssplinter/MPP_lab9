@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
 using System.Text;
-
 
 namespace Lab9
 {
@@ -88,17 +87,10 @@ namespace Lab9
 
         public void Clear()
         {
-            
             Array.Clear(_arr, 0, _arr.Length);
             Array.Resize(ref _arr, 0);
             Count = 0;
         }
-
-        public IEnumerator GetEnumerator()
-        {
-            throw new System.NotImplementedException();
-        }
-
         private void ReorganizeArr()
         {
             var newSize = _arr.Length + ArrAccretion;
@@ -125,6 +117,20 @@ namespace Lab9
             }
 
             return builder.ToString();
+        }
+        
+        
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (var i = 0; i < Count; i++)
+            {
+                yield return _arr[i];
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
