@@ -15,13 +15,16 @@ namespace Lab9
             list.Add(new Animal("fox"));
             list.Add(dambo);
             
+            Console.WriteLine(list.Count);
             Console.WriteLine(list.ToString());
+            Console.WriteLine(list[1]);
+            
             
             list.Remove(dambo);
             
             Console.WriteLine(list.ToString());
             
-            list.RemoveAt(3);
+            list.RemoveAt(2);
             
             Console.WriteLine(list.ToString());
             

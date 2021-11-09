@@ -8,9 +8,10 @@ namespace Lab9
     public class DynamicList<T> : IEnumerable
     {
         private const int ArrAccretion = 100;
-        
+
         private T[] _arr;
-        public int Count { get; set; }
+        private int _currentIndex;
+        public int Count => _currentIndex;
 
         public T this[int index]
         {
@@ -38,7 +39,7 @@ namespace Lab9
                 }
                 else
                 {
-                    throw new IndexOutOfRangeException("DynamicList was not initialised");
+                    throw new IndexOutOfRangeException();
                 }
             }
         }
@@ -46,38 +47,38 @@ namespace Lab9
         public DynamicList()
         {
             _arr = new T[ArrAccretion];
-            Count = 0;
+            _currentIndex = 0;
         }
 
         public void Add(T newItem)
         {
-            if (Count == _arr.Length)
+            if (_currentIndex == _arr.Length)
             {
                 ReorganizeArr();
             }
 
-            _arr[Count] = newItem;
-            Count++;
+            _arr[_currentIndex] = newItem;
+            _currentIndex++;
         }
 
         public void Remove(T removableItem)
         {
-            for (var i = 0; i < Count; i++)
+            for (var i = 0; i < _currentIndex; i++)
             {
                 if (_arr[i].Equals(removableItem))
                 {
                     ShiftArray(i);
-                    Count--;
+                    _currentIndex--;
                 }
             }
         }
 
         public void RemoveAt(int index)
         {
-            if (Count > index)
+            if (_currentIndex > index)
             {
                 ShiftArray(index);
-                Count--;
+                _currentIndex--;
             }
             else
             {
@@ -89,8 +90,9 @@ namespace Lab9
         {
             Array.Clear(_arr, 0, _arr.Length);
             Array.Resize(ref _arr, 0);
-            Count = 0;
+            _currentIndex = 0;
         }
+
         private void ReorganizeArr()
         {
             var newSize = _arr.Length + ArrAccretion;
@@ -99,30 +101,30 @@ namespace Lab9
 
         private void ShiftArray(int index)
         {
-            for (var i = index; i < Count; i++)
+            for (var i = index; i < _currentIndex; i++)
             {
                 _arr[i] = _arr[i + 1];
             }
 
-            _arr[Count] = default(T);
+            // _arr[_currentIndex] = default(T);
         }
 
         public override string ToString()
         {
             var builder = new StringBuilder();
-            
-            for(var i = 0; i < Count; i++)
+
+            for (var i = 0; i < _currentIndex; i++)
             {
                 builder.Append(_arr[i] + "\n");
             }
 
             return builder.ToString();
         }
-        
-        
-        public IEnumerator<T> GetEnumerator()
+
+
+        private IEnumerator<T> GetEnumerator()
         {
-            for (var i = 0; i < Count; i++)
+            for (var i = 0; i < _currentIndex; i++)
             {
                 yield return _arr[i];
             }
